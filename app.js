@@ -28,6 +28,32 @@ app.post("/create", async (req, res) => {
   res.redirect("/read");
 });
 
+app.get("/edit/:id", async (req, res) => {
+  const user = await UserModel.findById({ _id: req.params.id });
+  console.log(user);
+  res.render("update", { user });
+});
+
+app.post("/update/:id", async (req, res) => {
+  const { name, email, imageURL } = req.body;
+  console.log(req.body);
+  const user = await UserModel.findByIdAndUpdate(
+    { _id: req.params.id },
+    { name, email, imageURL },
+    { new: true }
+  );
+  console.log(user);
+
+  res.redirect("/read");
+});
+
+// delete a user by its id
+
+app.get("/delete/:id", async (req, res) => {
+  const user = await UserModel.findByIdAndDelete({ _id: req.params.id });
+  console.log("deleted");
+  res.redirect("/read");
+});
 app.listen(3000, (req, res) => {
   console.log("server is running");
 });
